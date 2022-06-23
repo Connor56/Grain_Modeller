@@ -1,0 +1,39 @@
+#cell_1_only
+units metal
+dimension 3
+boundary p p p
+
+atom_style atomic
+pair_style morse 12.0
+read_data cell_1_only.in
+
+#Pair_Coeff if MEAM
+
+#Energy Compute
+compute per_atom all pe/atom
+
+#Atom Type Computes
+group atom_type_1 type 1
+
+#Atom Type 1 Computes
+compute type_1_energy atom_type_1 reduce sum c_per_atom
+variable number_of_type_1_atoms equal count(atom_type_1)
+variable atom_type_1_energy_per_atom equal c_type_1_energy/v_number_of_type_1_atoms
+
+#Stress computations
+compute stress all stress/atom NULL
+variable total_stress atom abs(c_stress[1])+abs(c_stress[2])+abs(c_stress[3])&
++abs(c_stress[4])+abs(c_stress[5])+abs(c_stress[6])
+variable average_stress atom v_total_stress/6
+
+#Thermo output style
+thermo_style custom step temp epair emol etotal press c_type_1_energy v_number_of_type_1_atoms v_atom_type_1_energy_per_atom
+
+#Thermo output timesteps
+thermo 1000
+
+dump MiDump all custom 1000 cell_1_only.xyz id type xs ys zs fx fy fz &
+c_stress[1] c_stress[2] c_stress[3] c_stress[4] c_stress[5] c_stress[6] &
+v_average_stress v_total_stress
+fix run all nvt temp 1.0 1.0 $(100.0*dt)
+run 8000

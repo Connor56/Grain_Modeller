@@ -1,0 +1,19 @@
+opti prop conp full nosymmetry
+title
+make_gulp_file_test
+end
+cell
+4.0 4.0 4.0 90.0 90.0 90.0
+name make_gulp_file_test
+fractional
+Fe c 0.0 0.0 0.0
+#COORD_END
+morse
+Nd Nd 0.312 0.945 4.092 12
+morse
+Nd Fe 0.6036 1.6458 3.188 12
+morse
+Fe Fe 0.764 1.5995 2.7361 12
+dump test_files/make_gulp_file_test_restart.gin
+output cif test_files/make_gulp_file_test.cif
+output xyz test_files/make_gulp_file_test.xyz

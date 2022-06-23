@@ -1,0 +1,34 @@
+REQUIRED_VARIABLES
+Name, Number_of_Atoms, Number_of_Atom_Types, X_Box_Minimum, X_Box_Maximum,
+Y_Box_Minimum, Y_Box_Maximum, Z_Box_Minimum, Z_Box_Maximum, XY, XZ, YZ,
+Atoms_Cartesian_LAMMPS, Masses_LAMMPS
+REQUIRED_VARIABLES
+
+POSSIBLE_VARIABLES
+Potentials
+POSSIBLE_VARIABLES
+
+TEMPLATE
+--#Name#--
+
+--#Number_of_Atoms#-- atoms
+--#Number_of_Atom_Types#-- atom types
+--#X_Box_Minimum#-- --#X_Box_Maximum#-- xlo xhi
+--#Y_Box_Minimum#-- --#Y_Box_Maximum#-- ylo yhi
+--#Z_Box_Minimum#-- --#Z_Box_Maximum#-- zlo zhi
+--#XY#-- --#XZ#-- --#YZ#-- xy xz yz
+
+Atoms
+
+--#Atoms_Cartesian_LAMMPS#--
+
+Masses
+
+--#Masses_LAMMPS#--
+
+POSSIBLE:Potentials
+PairIJ Coeffs
+
+--#Potentials#--
+POSSIBLE:Potentials
+TEMPLATE

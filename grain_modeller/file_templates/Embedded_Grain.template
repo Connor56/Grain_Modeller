@@ -1,0 +1,70 @@
+REQUIRED_VARIABLES
+Name, Surrounding_File, Embedded_File, Deletion_Overlap, Thermo_Step,
+Dump_Steps_1, Dump_Steps_2, Dump_Output_Name, Start_Temp, Final_Temp,
+Start_Press, Final_Press, Run_Length_1, Run_Length_2
+REQUIRED_VARIABLES
+
+POSSIBLE_VARIABLES
+Pair_Style, MEAM_Library
+POSSIBLE_VARIABLES
+
+TEMPLATE
+#Embedded_Grain_Simulation: --#Name#--
+units metal
+dimension 3
+boundary p p p
+
+atom_style atomic
+POSSIBLE:Pair_Style
+pair_style --#Pair_Style#--
+POSSIBLE:Pair_Style
+read_data --#Surrounding_File#-- group surrounding
+read_data --#Embedded_File#-- group embedded add append
+
+POSSIBLE:MEAM_Library
+#Pair_Coeff MEAM
+pair_coeff * * --#MEAM_Library#--
+POSSIBLE:MEAM_Library
+
+#Delete Atoms
+delete_atoms overlap --#Deletion_Overlap#-- surrounding embedded
+
+#Energy Per Atom Computes for embedded grain
+compute per_atom all pe/atom
+compute embedded_energy embedded reduce sum c_per_atom
+variable num_embedded equal count(embedded)
+variable embedded_energy_per_atom equal c_embedded_energy/v_num_embedded
+
+#Energy Per Atom Computes for surrounding structure
+compute surrounding_energy surrounding reduce sum c_per_atom
+variable num_surrounding equal count(surrounding)
+variable surrounding_energy_per_atom equal c_surrounding_energy/v_num_surrounding
+
+#Number of Atoms
+variable total_atoms equal count(all)
+
+#Stress computations
+compute stress all stress/atom NULL
+variable total_stress atom abs(c_stress[1])+abs(c_stress[2])+abs(c_stress[3])&
++abs(c_stress[4])+abs(c_stress[5])+abs(c_stress[6])
+variable average_stress atom v_total_stress/6
+
+#Thermo output style
+thermo_style custom step temp epair emol etotal press &
+v_num_embedded c_embedded_energy v_embedded_energy_per_atom &
+v_num_surrounding c_surrounding_energy v_surrounding_energy_per_atom &
+v_total_atoms
+
+thermo --#Thermo_Step#--
+
+#Dump custom setup
+dump MiDump all custom --#Dump_Steps_1#-- --#Dump_Output_Name#-- id type x y z fx fy fz &
+c_stress[1] c_stress[2] c_stress[3] c_stress[4] c_stress[5] c_stress[6] &
+v_average_stress v_total_stress
+fix run all npt temp --#Start_Temp#-- --#Final_Temp#-- $(100.0*dt) aniso --#Start_Press#-- --#Final_Press#-- $(1000.0*dt)
+run --#Run_Length_1#--
+dump_modify MiDump every --#Dump_Steps_2#--
+run --#Run_Length_2#--
+#Minimize to get final energy
+minimize 0.0 0.0 10000 100000
+TEMPLATE

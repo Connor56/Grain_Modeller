@@ -1,0 +1,17 @@
+opti prop conp full nosymmetry
+title
+gulp_minimisation_meam
+end
+cell
+3.83 3.83 3.711 90.0 90.0 90.0
+name gulp_minimisation_meam
+fractional
+Fe c 0.0 0.0 0.0
+Fe c 0.5 0.5 0.0
+Pt c 0.0 0.5 0.5
+Pt c 0.5 0.0 0.5
+#COORD_END
+library nodump meam_2nn
+dump gulp_minimisation_meam_restart.gin
+output cif gulp_minimisation_meam.cif
+output xyz gulp_minimisation_meam.xyz

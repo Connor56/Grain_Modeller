@@ -1,0 +1,42 @@
+#Boundary Orientation
+units metal
+dimension 3
+boundary s s s
+
+atom_style atomic
+pair_style morse 12.0
+read_data boundary_orientation.in
+
+#Pair_Coeff if MEAM
+
+#Interface Region Setup
+region check_interface_region block $(xlo+1.0+12) $(xhi-1.0-12) $(ylo+1.0+12) $(yhi-1.0-12) EDGE EDGE
+
+#All Atom Computes
+group check_interface_atoms region check_interface_region
+compute per_atom all pe/atom
+compute interface_energy check_interface_atoms reduce sum c_per_atom
+variable number_of_interface_atoms equal count(check_interface_atoms)
+variable interface_energy_per_atom equal c_interface_energy/v_number_of_interface_atoms
+
+#Atom Type Computes
+group atom_type_1 type 1
+group atom_type_2 type 2
+
+#Atom interface Type 1 Computes
+group type_1_interface_atoms intersect atom_type_1 check_interface_atoms
+compute type_1_interface_energy type_1_interface_atoms reduce sum c_per_atom
+variable number_of_type_1_interface_atoms equal count(type_1_interface_atoms)
+variable interface_type_1_energy_per_atom equal c_type_1_interface_energy/v_number_of_type_1_interface_atoms
+
+#Atom interface Type 2 Computes
+group type_2_interface_atoms intersect atom_type_2 check_interface_atoms
+compute type_2_interface_energy type_2_interface_atoms reduce sum c_per_atom
+variable number_of_type_2_interface_atoms equal count(type_2_interface_atoms)
+variable interface_type_2_energy_per_atom equal c_type_2_interface_energy/v_number_of_type_2_interface_atoms
+
+thermo_style custom step temp epair emol etotal press c_interface_energy v_number_of_interface_atoms v_interface_energy_per_atom c_type_1_interface_energy v_number_of_type_1_interface_atoms v_interface_type_1_energy_per_atom c_type_2_interface_energy v_number_of_type_2_interface_atoms v_interface_type_2_energy_per_atom
+thermo 100
+
+dump MiDump all atom 100 orientation_minimize.xyz
+minimize 1e-25 1e-25 1 100

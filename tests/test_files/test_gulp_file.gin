@@ -1,0 +1,24 @@
+opti prop conp full nosymmetry
+title
+test_gulp_file
+end
+cell
+9.797958971132712 9.797958971132712 9.797958971132712 90 90 90
+name test_gulp_file
+fractional
+Fe c 0.0 0.0 0.0
+Fe c 0.16666666666666666 0.5 0.3333333333333333
+Fe c 0.3333333333333333 0.0 0.6666666666666666
+Fe c 0.5 0.5 0.0
+Fe c 0.6666666666666666 0.0 0.3333333333333333
+Fe c 0.8333333333333333 0.5 0.6666666666666666
+#COORD_END
+morse
+Nd Nd 0.312 0.945 4.092 12
+morse
+Nd Fe 0.6036 1.6458 3.188 12
+morse
+Fe Fe 0.764 1.5995 2.7361 12
+dump restart
+output cif test_gulp_file.cif
+output xyz test_gulp_file.xyz

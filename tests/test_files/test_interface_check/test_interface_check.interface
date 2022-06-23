@@ -1,0 +1,93 @@
+#test_interface
+units metal
+dimension 3
+boundary p p p
+
+atom_style atomic
+pair_style morse 12.0
+read_data test_interface_cell_1.in group interface_1_atoms
+change_box all x final -3.608224830031759e-16 77.33873310999999 y final -3.608224830031759e-16 172.50527526399998 z final 0.0 42.095388 units box
+read_data test_interface_cell_2.in group interface_2_atoms add append
+
+#Pair_Coeff if MEAM
+
+#Frozen Region
+region frozen_region block $(xlo+12.0) $(xhi-12.0) $(ylo+12.0) $(yhi-12.0) $(zlo+12.0) $(zhi-12.0) side out
+group frozen_atoms region frozen_region
+velocity frozen_atoms set 0 0 0
+fix freeze frozen_atoms setforce 0 0 0
+
+#Interface Region
+region interface_region block $(xlo+12.0) $(xhi-12.0) $(ylo+12.0) $(yhi-12.0) $(zlo+12.0) $(zhi-12.0)
+group interface_atoms region interface_region
+
+#Interface Region Setup
+group unfrozen_interface_1_atoms intersect interface_atoms interface_1_atoms
+group unfrozen_interface_2_atoms intersect interface_atoms interface_2_atoms
+
+#Full Interface Computes
+compute per_atom all pe/atom
+compute interface_energy interface_atoms reduce sum c_per_atom
+variable number_of_interface_atoms equal count(interface_atoms)
+variable interface_energy_per_atom equal c_interface_energy/v_number_of_interface_atoms
+
+#Interface 1 Computes
+compute interface_1_energy unfrozen_interface_1_atoms reduce sum c_per_atom
+variable number_of_unfrozen_interface_1_atoms equal count(unfrozen_interface_1_atoms)
+variable interface_1_energy_per_atom equal c_interface_1_energy/v_number_of_unfrozen_interface_1_atoms
+
+#Interface 2 Computes
+compute interface_2_energy unfrozen_interface_2_atoms reduce sum c_per_atom
+variable number_of_unfrozen_interface_2_atoms equal count(unfrozen_interface_2_atoms)
+variable interface_2_energy_per_atom equal c_interface_2_energy/v_number_of_unfrozen_interface_2_atoms
+
+#Atom Type Computes
+group atom_type_1 type 1
+group atom_type_2 type 2
+
+#Atom interface_1 Type 1 Computes
+group type_1_interface_1_atoms intersect atom_type_1 unfrozen_interface_1_atoms
+compute type_1_interface_1_energy type_1_interface_1_atoms reduce sum c_per_atom
+variable number_of_type_1_interface_1_atoms equal count(type_1_interface_1_atoms)
+variable interface_1_type_1_energy_per_atom equal c_type_1_interface_1_energy/v_number_of_type_1_interface_1_atoms
+
+#Atom interface_1 Type 2 Computes
+group type_2_interface_1_atoms intersect atom_type_2 unfrozen_interface_1_atoms
+compute type_2_interface_1_energy type_2_interface_1_atoms reduce sum c_per_atom
+variable number_of_type_2_interface_1_atoms equal count(type_2_interface_1_atoms)
+variable interface_1_type_2_energy_per_atom equal c_type_2_interface_1_energy/v_number_of_type_2_interface_1_atoms
+
+#Atom interface_2 Type 1 Computes
+group type_1_interface_2_atoms intersect atom_type_1 unfrozen_interface_2_atoms
+compute type_1_interface_2_energy type_1_interface_2_atoms reduce sum c_per_atom
+variable number_of_type_1_interface_2_atoms equal count(type_1_interface_2_atoms)
+variable interface_2_type_1_energy_per_atom equal c_type_1_interface_2_energy/v_number_of_type_1_interface_2_atoms
+
+#Atom interface_2 Type 2 Computes
+group type_2_interface_2_atoms intersect atom_type_2 unfrozen_interface_2_atoms
+compute type_2_interface_2_energy type_2_interface_2_atoms reduce sum c_per_atom
+variable number_of_type_2_interface_2_atoms equal count(type_2_interface_2_atoms)
+variable interface_2_type_2_energy_per_atom equal c_type_2_interface_2_energy/v_number_of_type_2_interface_2_atoms
+
+#Stress computations
+compute stress interface_atoms stress/atom NULL
+variable total_stress atom abs(c_stress[1])+abs(c_stress[2])+abs(c_stress[3])&
++abs(c_stress[4])+abs(c_stress[5])+abs(c_stress[6])
+variable average_stress atom v_total_stress/6
+
+#Thermo output style
+thermo_style custom step temp epair emol etotal press c_interface_energy &
+v_number_of_interface_atoms v_interface_energy_per_atom c_interface_1_energy &
+v_number_of_unfrozen_interface_1_atoms v_interface_1_energy_per_atom c_interface_2_energy &
+v_number_of_unfrozen_interface_2_atoms v_interface_2_energy_per_atom c_type_1_interface_1_energy v_number_of_type_1_interface_1_atoms v_interface_1_type_1_energy_per_atom c_type_1_interface_2_energy v_number_of_type_1_interface_2_atoms v_interface_2_type_1_energy_per_atom c_type_2_interface_1_energy v_number_of_type_2_interface_1_atoms v_interface_1_type_2_energy_per_atom c_type_2_interface_2_energy v_number_of_type_2_interface_2_atoms v_interface_2_type_2_energy_per_atom
+
+thermo 1000
+
+#Dump custom setup
+dump MiDump all custom 100 interface_nvt.xyz id type xs ys zs fx fy fz &
+c_stress[1] c_stress[2] c_stress[3] c_stress[4] c_stress[5] c_stress[6] &
+v_average_stress v_total_stress
+fix run all nvt temp 1.0 1.0 $(100.0*dt)
+run 3000
+dump_modify MiDump every 1000
+run 15000

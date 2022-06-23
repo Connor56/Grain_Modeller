@@ -1,0 +1,137 @@
+opti prop conp full nosymmetry
+title
+SmFe12 test file
+end
+name SmFe12
+cell
+16.92959 16.92959 4.809692 90.0 90.0 90.0 
+#supercell 2 2 1
+frac
+Sm core 0.000000 0.000000 0.000000 #original atom
+Sm core 0.000000 0.500000 1.000000 #original atom
+Sm core 0.500000 0.000000 1.000000 #original atom
+Sm core 0.500000 0.500000 1.000000 #original atom
+Sm core 0.250000 0.250000 0.500000 #original atom
+Sm core 0.250000 0.750000 0.500000 #original atom
+Sm core 0.750000 0.250000 0.500000 #original atom
+Sm core 0.750000 0.750000 0.500000 #original atom
+Fe core 0.178203 0.000000 1.000000 #original atom
+Fe core 0.178203 0.500000 1.000000 #original atom
+Fe core 0.678203 0.000000 1.000000 #original atom
+Fe core 0.678203 0.500000 1.000000 #original atom
+Fe core 0.428203 0.250000 0.500000 #original atom
+Fe core 0.428203 0.750000 0.500000 #original atom
+Fe core 0.928203 0.250000 0.500000 #original atom
+Fe core 0.928203 0.750000 0.500000 #original atom
+Fe core 0.321797 0.000000 1.000000 #original atom
+Fe core 0.321797 0.500000 1.000000 #original atom
+Fe core 0.821797 0.000000 1.000000 #original atom
+Fe core 0.821797 0.500000 1.000000 #original atom
+Fe core 0.071797 0.250000 0.500000 #original atom
+Fe core 0.071797 0.750000 0.500000 #original atom
+Fe core 0.571797 0.250000 0.500000 #original atom
+Fe core 0.571797 0.750000 0.500000 #original atom
+Fe core 0.000000 0.321797 1.000000 #original atom
+Fe core 0.000000 0.821797 1.000000 #original atom
+Fe core 0.500000 0.321797 1.000000 #original atom
+Fe core 0.500000 0.821797 1.000000 #original atom
+Fe core 0.250000 0.071797 0.500000 #original atom
+Fe core 0.250000 0.571797 0.500000 #original atom
+Fe core 0.750000 0.071797 0.500000 #original atom
+Fe core 0.750000 0.571797 0.500000 #original atom
+Fe core 0.000000 0.178203 1.000000 #original atom
+Fe core 0.000000 0.678203 1.000000 #original atom
+Fe core 0.500000 0.178203 1.000000 #original atom
+Fe core 0.500000 0.678203 1.000000 #original atom
+Fe core 0.250000 0.428203 0.500000 #original atom
+Fe core 0.250000 0.928203 0.500000 #original atom
+Fe core 0.750000 0.428203 0.500000 #original atom
+Fe core 0.750000 0.928203 0.500000 #original atom
+Fe core 0.141913 0.250000 1.000000 #original atom
+Fe core 0.141913 0.750000 1.000000 #original atom
+Fe core 0.641913 0.250000 1.000000 #original atom
+Fe core 0.641913 0.750000 1.000000 #original atom
+Fe core 0.391913 0.000000 0.500000 #original atom
+Fe core 0.391913 0.500000 0.500000 #original atom
+Fe core 0.891913 0.000000 0.500000 #original atom
+Fe core 0.891913 0.500000 0.500000 #original atom
+Fe core 0.108087 0.000000 0.500000 #original atom
+Fe core 0.108087 0.500000 0.500000 #original atom
+Fe core 0.608087 0.000000 0.500000 #original atom
+Fe core 0.608087 0.500000 0.500000 #original atom
+Fe core 0.358087 0.250000 1.000000 #original atom
+Fe core 0.358087 0.750000 1.000000 #original atom
+Fe core 0.858087 0.250000 1.000000 #original atom
+Fe core 0.858087 0.750000 1.000000 #original atom
+Fe core 0.000000 0.108087 0.500000 #original atom
+Fe core 0.000000 0.608087 0.500000 #original atom
+Fe core 0.500000 0.108087 0.500000 #original atom
+Fe core 0.500000 0.608087 0.500000 #original atom
+Fe core 0.250000 0.358087 1.000000 #original atom
+Fe core 0.250000 0.858087 1.000000 #original atom
+Fe core 0.750000 0.358087 1.000000 #original atom
+Fe core 0.750000 0.858087 1.000000 #original atom
+Fe core 0.250000 0.141913 1.000000 #original atom
+Fe core 0.250000 0.641913 1.000000 #original atom
+Fe core 0.750000 0.141913 1.000000 #original atom
+Fe core 0.750000 0.641913 1.000000 #original atom
+Fe core 0.000000 0.391913 0.500000 #original atom
+Fe core 0.000000 0.891913 0.500000 #original atom
+Fe core 0.500000 0.391913 0.500000 #original atom
+Fe core 0.500000 0.891913 0.500000 #original atom
+Fe core 0.125000 0.125000 0.250000 #original atom
+Fe core 0.125000 0.625000 0.250000 #original atom
+Fe core 0.625000 0.125000 0.250000 #original atom
+Fe core 0.625000 0.625000 0.250000 #original atom
+Fe core 0.375000 0.375000 0.750000 #original atom
+Fe core 0.375000 0.875000 0.750000 #original atom
+Fe core 0.875000 0.375000 0.750000 #original atom
+Fe core 0.875000 0.875000 0.750000 #original atom
+Fe core 0.125000 0.125000 0.750000 #original atom
+Fe core 0.125000 0.625000 0.750000 #original atom
+Fe core 0.625000 0.125000 0.750000 #original atom
+Fe core 0.625000 0.625000 0.750000 #original atom
+Fe core 0.375000 0.375000 0.250000 #original atom
+Fe core 0.375000 0.875000 0.250000 #original atom
+Fe core 0.875000 0.375000 0.250000 #original atom
+Fe core 0.875000 0.875000 0.250000 #original atom
+Fe core 0.375000 0.125000 0.250000 #original atom
+Fe core 0.375000 0.625000 0.250000 #original atom
+Fe core 0.875000 0.125000 0.250000 #original atom
+Fe core 0.875000 0.625000 0.250000 #original atom
+Fe core 0.125000 0.375000 0.750000 #original atom
+Fe core 0.125000 0.875000 0.750000 #original atom
+Fe core 0.625000 0.375000 0.750000 #original atom
+Fe core 0.625000 0.875000 0.750000 #original atom
+Fe core 0.125000 0.375000 0.250000 #original atom
+Fe core 0.125000 0.875000 0.250000 #original atom
+Fe core 0.625000 0.375000 0.250000 #original atom
+Fe core 0.625000 0.875000 0.250000 #original atom
+Fe core 0.375000 0.125000 0.750000 #original atom
+Fe core 0.375000 0.625000 0.750000 #original atom
+Fe core 0.875000 0.125000 0.750000 #original atom
+Fe core 0.875000 0.625000 0.750000 #original atom
+#coord_end
+morse
+Fe Fe 0.764 1.5995 2.7361  12
+morse
+Fe Ti 0.8162 1.448 2.914 12
+morse
+Sm Sm 0.2365 1.16433 3.8485 12
+morse
+Sm Ti 0.5219 1.98644 3.3129 12
+morse
+Ti Ti 0.6546 1.21133 3.3489 12
+morse
+Sm Fe 0.5891 1.48848 3.1394 12
+
+
+
+#pressure
+#0.0
+#temperature
+#300
+dump restart
+output cif SmFe12.cif
+output xyz SmFe12.xyz
+

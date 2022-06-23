@@ -1,0 +1,35 @@
+axes.titlesize : 24
+axes.labelsize : 20
+lines.linewidth : 2.5
+lines.markersize : 10
+lines.marker: .
+xtick.labelsize : 14
+ytick.labelsize : 14
+xtick.major.pad : 10
+xtick.minor.size : 2.5
+xtick.minor.width : 1
+ytick.major.pad : 10
+xtick.major.size : 5
+xtick.major.width : 1.5
+ytick.major.size : 5
+ytick.major.width : 1.5
+ytick.minor.size : 2.5
+ytick.minor.width : 1
+axes.labelpad : 10
+axes.spines.right : False
+axes.spines.top : False
+axes.linewidth : 2
+axes.grid.which: both
+legend.edgecolor : black
+legend.fontsize : 15
+legend.framealpha : 23
+legend.fancybox : True
+font.family : sans-serif
+font.sans-serif : Times New Roman
+font.style : normal
+figure.figsize : 10, 6
+figure.dpi : 120
+axes.grid : True
+grid.alpha : 0.4
+grid.linestyle : (0, (8, 8))
+axes.prop_cycle : cycler('color', ['grey', 'b', 'r', 'd62728', '9467bd', '8c564b', 'e377c2', '7f7f7f', 'bcbd22', '17becf'])

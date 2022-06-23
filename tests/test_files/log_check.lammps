@@ -1,0 +1,107 @@
+LAMMPS (3 Mar 2020)
+#Boundary Orientation
+units metal
+dimension 3
+boundary s s s
+
+atom_style atomic
+pair_style morse 12.0
+read_data boundary_orientation.in
+  triclinic box = (2.24 1.1 0.498) to (34.1 34.1 3) with tilt (0 0 0)
+  2 by 2 by 1 MPI processor grid
+  reading atoms ...
+  4 atoms
+  read_data CPU = 0.017809 secs
+
+#Interface Region Setup
+region check_interface_region block $(xlo+1.0+12) $(xhi-1.0-12) $(ylo+1.0+12) $(yhi-1.0-12) EDGE EDGE
+region check_interface_region block 15.336814000000000391 $(xhi-1.0-12) $(ylo+1.0+12) $(yhi-1.0-12) EDGE EDGE
+region check_interface_region block 15.336814000000000391 21.003185999999999467 $(ylo+1.0+12) $(yhi-1.0-12) EDGE EDGE
+region check_interface_region block 15.336814000000000391 21.003185999999999467 14.196699999999999875 $(yhi-1.0-12) EDGE EDGE
+region check_interface_region block 15.336814000000000391 21.003185999999999467 14.196699999999999875 21.003300000000002967 EDGE EDGE
+
+#All Atom Computes
+group check_interface_atoms region check_interface_region
+2 atoms in group check_interface_atoms
+compute per_atom all pe/atom
+compute interface_energy check_interface_atoms reduce sum c_per_atom
+variable number_of_interface_atoms equal count(check_interface_atoms)
+variable interface_energy_per_atom equal c_interface_energy/v_number_of_interface_atoms
+
+#Atom Type Computes
+group atom_type_1 type 1
+2 atoms in group atom_type_1
+group atom_type_2 type 2
+2 atoms in group atom_type_2
+
+#Atom interface Type 1 Computes
+group type_1_interface_atoms intersect atom_type_1 check_interface_atoms
+1 atoms in group type_1_interface_atoms
+compute type_1_interface_energy type_1_interface_atoms reduce sum c_per_atom
+variable number_of_type_1_interface_atoms equal count(type_1_interface_atoms)
+variable interface_type_1_energy_per_atom equal c_type_1_interface_energy/v_number_of_type_1_interface_atoms
+
+#Atom interface Type 2 Computes
+group type_2_interface_atoms intersect atom_type_2 check_interface_atoms
+1 atoms in group type_2_interface_atoms
+compute type_2_interface_energy type_2_interface_atoms reduce sum c_per_atom
+variable number_of_type_2_interface_atoms equal count(type_2_interface_atoms)
+variable interface_type_2_energy_per_atom equal c_type_2_interface_energy/v_number_of_type_2_interface_atoms
+
+thermo_style custom step temp epair emol etotal press c_interface_energy v_number_of_interface_atoms v_interface_energy_per_atom c_type_1_interface_energy v_number_of_type_1_interface_atoms v_interface_type_1_energy_per_atom c_type_2_interface_energy v_number_of_type_2_interface_atoms v_interface_type_2_energy_per_atom
+thermo 100
+
+dump MiDump all atom 100 orientation_minimize.xyz
+minimize 1e-25 1e-25 1 100
+WARNING: Using 'neigh_modify every 1 delay 0 check yes' setting during minimization (../min.cpp:190)
+Neighbor list info ...
+  update every 1 steps, delay 0 steps, check yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 14
+  ghost atom cutoff = 14
+  binsize = 7, bins = 5 5 1
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair morse, perpetual
+      attributes: half, newton on
+      pair build: half/bin/newton/tri
+      stencil: half/bin/3d/newton/tri
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 4.182 | 5.026 | 5.307 Mbytes
+Step Temp E_pair E_mol TotEng Press c_interface_energy v_number_of_interface_atoms v_interface_energy_per_atom c_type_1_interface_energy v_number_of_type_1_interface_atoms v_interface_type_1_energy_per_atom c_type_2_interface_energy v_number_of_type_2_interface_atoms v_interface_type_2_energy_per_atom 
+       0            0  -0.60213512            0  -0.60213512   -61.528752  -0.60213512            2  -0.30106756  -0.30106756            1  -0.30106756  -0.30106756            1  -0.30106756 
+       1            0  -0.60343593            0  -0.60343593   -21.165448  -0.60343593            2  -0.30171796  -0.30171796            1  -0.30171796  -0.30171796            1  -0.30171796 
+Loop time of 9.125e-05 on 4 procs for 1 steps with 4 atoms
+
+92.1% CPU use with 4 MPI tasks x no OpenMP threads
+
+Minimization stats:
+  Stopping criterion = max iterations
+  Energy initial, next-to-last, final = 
+       -0.602135119937    -0.602135119937    -0.603435927343
+  Force two-norm initial, final = 0.131601 0.0455612
+  Force max component initial, final = 0.086733 0.0300276
+  Final line search alpha, max atom move = 1 0.0300276
+  Iterations, force evaluations = 1 2
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0          | 5e-07      | 1e-06      |   0.0 |  0.55
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 4e-06      | 5.75e-06   | 7e-06      |   0.0 |  6.30
+Output  | 4.8e-05    | 4.9e-05    | 5.2e-05    |   0.0 | 53.70
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 3.6e-05    |            |       | 39.45
+
+Nlocal:    1 ave 2 max 0 min
+Histogram: 1 0 0 0 0 2 0 0 0 1
+Nghost:    1.5 ave 2 max 1 min
+Histogram: 2 0 0 0 0 0 0 0 0 2
+Neighs:    0.25 ave 1 max 0 min
+Histogram: 3 0 0 0 0 0 0 0 0 1
+
+Total # of neighbors = 1
+Ave neighs/atom = 0.25
+Neighbor list builds = 0
+Dangerous builds = 0
+Total wall time: 0:00:00

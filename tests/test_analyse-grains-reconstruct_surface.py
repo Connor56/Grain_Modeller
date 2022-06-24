@@ -22,9 +22,15 @@ class TestAnalyse_ReconstructSurface(unittest.TestCase):
         clipped_areas = surface.grouped_area.sort_values(
             by='Area', ascending=False)
         clipped_areas = clipped_areas[clipped_areas['Area'] > surface.area/100]
-        indexes = clipped_areas.index
-        expected_indexes = [4, 23, 20, 140, 70, 68]
-        self.assertTrue(np.all(indexes == expected_indexes))
+        normals = clipped_areas['Normal']
+        self.assertTrue(np.all(
+            np.isclose(normals.iloc[0], [-0.009, -0.032, -1], atol=0.001)))
+        self.assertTrue(np.all(
+            np.isclose(normals.iloc[1], [-1, -0.009, -0.021], atol=0.001)))
+        self.assertTrue(np.all(
+            np.isclose(normals.iloc[3], [-0.0065, -0.021, 1], atol=0.001)))
+        self.assertTrue(np.all(
+            np.isclose(normals.iloc[5], [1.0, -0.007, -0.012], atol=0.001)))
 
     def test_analyse_large_complicated_grain(self):
         '''
@@ -37,11 +43,15 @@ class TestAnalyse_ReconstructSurface(unittest.TestCase):
         clipped_areas = surface.grouped_area.sort_values(
             by='Area', ascending=False)
         clipped_areas = clipped_areas[clipped_areas['Area'] > surface.area/100]
-        indexes = clipped_areas.index.tolist()
-        expected_indexes = [
-            151, 111,  15, 103, 365, 200, 343,   3,  19,  22, 261, 236, 251,
-            308, 307, 367, 297, 191, 189]
-        self.assertTrue(indexes == expected_indexes)
+        normals = clipped_areas['Normal']
+        self.assertTrue(np.all(
+            np.isclose(normals.iloc[0], [1, 0.033, 0.0070], atol=0.001)))
+        self.assertTrue(np.all(
+            np.isclose(normals.iloc[1], [-1, 0.034, -0.084], atol=0.001)))
+        self.assertTrue(np.all(
+            np.isclose(normals.iloc[3], [-1, -0.998, -0.0013], atol=0.001)))
+        self.assertTrue(np.all(
+            np.isclose(normals.iloc[6], [-0.0048, -0.665, 1], atol=0.001)))
 
     def test_surface_atoms(self):
         '''

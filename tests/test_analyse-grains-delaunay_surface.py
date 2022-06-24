@@ -16,8 +16,11 @@ class TestAnalyse_DelaunaySurface(unittest.TestCase):
             "test_analyse_surface_Cuboid_3000_atoms.in")
         surface = ds.analyse(atoms, alpha=2)
         indexes = surface.grouped_area.sort_values(by='Area').index.tolist()
-        expected_indexes = [10, 11, 13, 8, 12, 5, 9, 4, 0, 1, 7, 6, 3, 2]
-        self.assertTrue(indexes == expected_indexes)
+        normals = surface.grouped_area.sort_values(by='Area')['Normal']
+        self.assertTrue(normals.iloc[-1].tolist() == [0, 0, 1])
+        self.assertTrue(normals.iloc[-2].tolist() == [0, 0, -1])
+        self.assertTrue(normals.iloc[-3].tolist() == [1, 0, 0])
+        self.assertTrue(normals.iloc[-6].tolist() == [0, -1, 0])
 
     def test_get_shell(self):
         '''
@@ -25,12 +28,16 @@ class TestAnalyse_DelaunaySurface(unittest.TestCase):
         '''
         array = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
         shell = ds.get_shell(array, 2)
-        expected_surf_norms = np.array(
+        expected_surface_normals = np.array(
             [[1, 1, 1], [-1, 0 ,0], [0, -1, 0], [0, 0, -1]])
-        norms = np.linalg.norm(expected_surf_norms, axis=1).reshape(4, -1)
-        expected_surf_norms = expected_surf_norms/norms
-        surf_norms = np.array(shell.face_normals)
-        truth_array = np.isclose(expected_surf_norms, surf_norms, atol=0.0001)
+        norms = np.linalg.norm(expected_surface_normals, axis=1).reshape(4, -1)
+        expected_surface_normals = expected_surface_normals/norms
+        expected_surface_normals = expected_surface_normals[
+            np.lexsort(expected_surface_normals.T[::-1])]
+        surface_normals = np.array(shell.face_normals)
+        surface_normals = surface_normals[np.lexsort(surface_normals.T[::-1])]
+        truth_array = np.isclose(
+            expected_surface_normals, surface_normals, atol=0.0001)
         self.assertTrue(np.all(truth_array))
 
 

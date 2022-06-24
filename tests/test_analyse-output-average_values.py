@@ -23,13 +23,13 @@ class TestFastGrainSupercell(unittest.TestCase):
         Test function correctly gets the average position of atoms in an
         output file.
         '''
-        file = './test_files/average_atom_position_large_test.xyz'
+        file = './test_files/average_atom_finder_test.xyz'
         style = 'Lammps_Grain_Positions'
         average_positions = (
             average_values.get_average_positions(file, style, 0))
         self.assertTrue(len(average_positions) == 8531)
-        list = np.round(average_positions[1], 6).tolist()
-        self.assertTrue(list == [1.0, 0.097935, 0.307663, 0.375276])
+        position_list = np.round(average_positions[1], 6).tolist()
+        self.assertTrue(position_list == [1.0, 0.092593, 0.30537, 0.377981])
 
     def test_get_average_positions_2(self):
         '''
@@ -54,7 +54,10 @@ class TestFastGrainSupercell(unittest.TestCase):
             averaged_data, 'test')
         with open('test.in', 'r') as file:
             data = file.read().split('\n')
-        os.system('rm test.in')
+        if os.name == 'nt':
+            os.system('del test.in')
+        else:
+            os.system('rm test.in')
         expected_data = [
             'test', '', '2 atoms', '2 atom types', '1.0 3.0 xlo xhi',
             '1.0 5.0 ylo yhi', '1.0 6.0 zlo zhi', '0 0 0 xy xz yz', '',

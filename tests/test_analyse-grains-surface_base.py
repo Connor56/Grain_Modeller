@@ -83,26 +83,50 @@ class TestAnalyse_SurfaceBase(unittest.TestCase):
         expected_faces = [[0, 1, 2], [2, 2, 1], [5, 2, 1], [3, 1]]
         self.assertTrue(faces == expected_faces)
 
-    def test_get_simplex(self):
+    def OFF_original_test_get_simplex(self):
         '''
-        Check the correct simplex is gained from a set of points.
+        Check the correct simplex is gained from a set of points, by deriving
+        the points from a PolyData object.
         '''
         array = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]])
         cloud = pv.PolyData(array)
         volume = cloud.delaunay_3d(alpha=2)
         shell = volume.extract_geometry()
         points = np.array(shell.points[shell.faces[1:4]])
+        print(points)
         simplex = sb.get_simplex(points)
         vectors = np.array([[-1, 1, 0], [-1, 0, 1]]).astype(np.float32)
         area = 0.86602539
         normal = np.array([1, 1, 1]).astype(np.float32)
         normal = normal/np.linalg.norm(normal)
         expected_simplex = sb.Simplex(points, vectors, area, normal)
+        print(simplex)
+        print(expected_simplex)
         self.assertTrue(simplex == expected_simplex)
         self.assertTrue(np.all(simplex.normal == expected_simplex.normal))
         self.assertTrue(np.all(simplex.vectors == expected_simplex.vectors))
         self.assertTrue(np.all(simplex.area == expected_simplex.area))
         self.assertTrue(np.all(simplex.points == expected_simplex.points))
+    
+    def test_get_simplex(self):
+        '''
+        Check the correct simplex is gained from a set of points.
+        '''
+        points = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
+        simplex = sb.get_simplex(points)
+        vectors = np.array([[-1, 1, 0], [-1, 0, 1]]).astype(np.float32)
+        area = 0.86602539
+        normal = np.array([1, 1, 1]).astype(np.float32)
+        normal = normal/np.linalg.norm(normal)
+        expected_simplex = sb.Simplex(points, vectors, area, normal)
+        self.assertTrue(np.all(
+            np.isclose(simplex.normal, expected_simplex.normal, atol=1e-5)))
+        self.assertTrue(np.all(
+            np.isclose(simplex.vectors, expected_simplex.vectors, atol=1e-5)))
+        self.assertTrue(np.all(
+            np.isclose(simplex.area, expected_simplex.area, atol=1e-5)))
+        self.assertTrue(np.all(
+            np.isclose(simplex.points, expected_simplex.points, atol=1e-5)))
 
     def test_group_simplexes(self):
         '''
@@ -188,10 +212,19 @@ class TestAnalyse_SurfaceBase(unittest.TestCase):
         surface = sb.get_surface(shell)
         surface.grouped_simplexes = sb.group_simplexes(surface.simplexes, 0.01)
         areas = sb.get_areas(surface.grouped_simplexes)
-        indexes = areas.sort_values(by='Area').index.tolist()
-        self.assertTrue(indexes == [8, 7, 0, 6, 5, 4, 3, 1, 2])
-        self.assertTrue(areas['Area'].iloc[8] == 2.625)
-        self.assertTrue(areas['Area'].iloc[7] == 6.125)
+        areas = areas.sort_values(by='Area', ascending=False)
+        normals = areas['Normal']
+        self.assertTrue(np.all(
+            np.isclose(normals.iloc[0], [0, 0, -1], atol=0.001)
+        ))
+        self.assertTrue(np.all(
+            np.isclose(normals.iloc[1], [-0.857, -0.857, 1.0], atol=0.001)
+        ))
+        self.assertTrue(np.all(
+            np.isclose(normals.iloc[5], [1, 0, 0], atol=0.001)
+        ))
+        self.assertTrue(areas['Area'].iloc[-1] == 2.625)
+        self.assertTrue(areas['Area'].iloc[-2] == 6.125)
 
     def test_group_by_plane(self):
         '''

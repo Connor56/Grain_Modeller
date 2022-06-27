@@ -3,6 +3,8 @@ import os
 import sys
 import numpy as np
 
+#from grain_modeller.linear_algebra import rotation_matrix
+
 
 class TestEdits(unittest.TestCase):
 
@@ -97,6 +99,27 @@ class TestEdits(unittest.TestCase):
         self.assertFalse(np.all(atoms[:, 0] <= 3))
         self.assertFalse(np.all(atoms[:, 1] <= 2))
         self.assertTrue(np.all(atoms[:, 2] <= 25))
+    
+    def test_cartesian_plane_cut_with_rotation(self):
+        '''
+        Test a cartesian plane cut still works as expected when used on a
+        supercell which has been rotated.
+        '''
+        test_basis = [Atom('Fe', 0, 0, 0), Atom('Pt', 0.5, 0.5, 0.5)]
+        unitcell = UnitCell(test_basis, [3, 0, 0], [0, 3, 0], [0, 0, 3])
+        supercell = SuperCell(unitcell, 10, 10, 10)
+        vector = np.array([0, 1, 0])
+        atoms_before = supercell.fractional
+        rotation_matrix = linalg.vector_rotation_matrix(np.pi/4, vector)
+        transforms.rotate(supercell, rotation_matrix)
+        cut = edits.Cut('cp', [0, 0, 0], plane=[1, 0, 0])
+        edits.cartesian_plane_cut(supercell, cut)
+        atoms = supercell.fractional
+        self.assertFalse(atoms.shape[0] == atoms_before.shape[0])
+        supercell.set_cartesian()
+        atoms = supercell.cartesian
+        atoms = atoms['coordinates']
+        self.assertTrue(np.all(atoms[:, 2] <= 0))
 
     def test_spherical_cut(self):
         '''
@@ -290,6 +313,7 @@ if __name__ == '__main__':
     from supercell import SuperCell
     import edits
     import linear_algebra as linalg
+    import transforms
     import testing_tools as test_tool
     import crystallography
     unittest.main()

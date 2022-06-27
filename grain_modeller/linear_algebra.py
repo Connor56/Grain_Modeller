@@ -102,6 +102,7 @@ def plane_normal(vector_space, intercepts):
     plane_vector_2 = points[2] - points[0]
     normal = np.cross(plane_vector_1, plane_vector_2)
     unit_normal = normal/np.linalg.norm(normal)
+    # Choose normal so direction points away from the origin.
     distance_1 = np.linalg.norm(points[0] - unit_normal*0.1)
     distance_2 = np.linalg.norm(points[0] + unit_normal*0.1)
     if distance_1 > distance_2:
@@ -135,7 +136,8 @@ def plane_points(vector_space, intercepts):
         plane_point = np.array([0., 0., 0.])
         if intercepts[i] == np.inf:
             # If an intercept is infinity, select a plane point above a
-            # different intercept by the relevant vector.
+            # different intercept that is along the infinite intercepts lattice
+            # vector.
             plane_point[i] = 1
             plane_point[not_infinite_index] = intercepts[not_infinite_index]
         else:

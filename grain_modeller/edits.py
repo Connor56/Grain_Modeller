@@ -146,19 +146,12 @@ def cartesian_plane_cut(supercell, cut):
     directions of the supercell itself. Thus you must give points in cartesian
     coordinates, and normal directions in cartesian coordinates also.
     '''
-    #miller_indexes = np.array(cut.plane)
     plane_normal = np.array(cut.plane)
-    #print(miller_indexes)
-    #print(supercell.vector_space)
-    #plane_normal = crystallography.cartesian_plane_normal(
-    #    supercell.vector_space, miller_indexes)
-    #print(plane_normal)
     point = np.array(cut.point)
     if supercell.cartesian is None: supercell.set_cartesian()
     atoms = supercell.cartesian
     atoms = atoms['coordinates']
     atoms = atoms-point
-    #print(plane_normal)
     deletions = np.dot(atoms, plane_normal)
     deletions = (deletions < 0.0001)
     supercell.fractional = supercell.fractional[deletions]

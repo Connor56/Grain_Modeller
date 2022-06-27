@@ -113,7 +113,7 @@ class TestFileFormatter(unittest.TestCase):
                            + 'Fe 1.0 0.0 1.0\nPt 0.5 0.5 0.5\nPt 0.5 0.5 1.5\n'
                            + 'Pt 1.5 0.5 0.5\nPt 1.5 0.5 1.5')
         self.assertTrue(string == expected_string)
-        self.assertFalse(supercell.fractional == string)
+        self.assertFalse(type(supercell.fractional) == type(string))
 
     def test_speed_of_array_to_string(self):
         '''

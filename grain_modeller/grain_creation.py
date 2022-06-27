@@ -195,7 +195,8 @@ def best_composition(grains, atom_target):
         index = x % len(additions)
         additions[index] += 1
     composition = np.array(composition) + np.array(additions)
-    composition = np.array(tuple(composition), dtype=columns_integer)
+    composition = [tuple(composition)]
+    composition = np.array(composition, dtype=columns_integer)
     composition = pd.DataFrame(composition, index=[0])
     for grain in grains:
         grain.best_composition = composition
@@ -314,7 +315,7 @@ def get_composition(grain):
     elements = grain.supercell.fractional['element']
     elements, counts = np.unique(elements, return_counts=True)
     composition = [(element, 'i8') for element in elements]
-    composition = np.array(tuple(counts), dtype=composition)
+    composition = np.array([tuple(counts)], dtype=composition)
     composition = pd.DataFrame(composition, index=[0])
     return composition
 

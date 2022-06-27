@@ -7,6 +7,7 @@ package.
 '''
 import numpy as np
 import os
+import re
 
 
 def get_best_normal(normals, centre, point):
@@ -84,13 +85,11 @@ def create_input_file(file_input, name, file_type):
 
 
 def get_package_directory():
-    current_directory = os.getcwd().split('/')
-    try:
-        package_directory_index = current_directory.index('grain_modeller')
-        package_directory = ('../'*(len(current_directory)-
-                            package_directory_index-1))
-    except ValueError:
-        package_directory = '../grain_modeller/'
+    current_directory = os.getcwd()
+    directory_pattern = re.compile("grain_modeller", re.IGNORECASE)
+    package_name_end = directory_pattern.search(current_directory).span()[1]
+    package_directory = current_directory[:package_name_end]+'/'
+    package_directory = package_directory.replace('\\', '/')
     return package_directory
 
 

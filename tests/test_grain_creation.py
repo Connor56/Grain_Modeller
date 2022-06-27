@@ -256,7 +256,7 @@ class TestGrainCreation(unittest.TestCase):
         repeat_ratio = [1, 1, 1]
         grain = gc.Grain('test', unitcell, cuts, repeat_ratio)
         grain.supercell = gc.build_grain(grain, 10)
-        composition = np.array((550, 450),
+        composition = np.array([(550, 450)],
                                dtype=[('Fe', 'i8'), ('Pt', 'i8')])
         composition = pd.DataFrame(composition, index=[0])
         grain.best_composition = composition
@@ -316,7 +316,7 @@ class TestGrainCreation(unittest.TestCase):
         grain.supercell = gc.build_grain(grain, 10)
         surface_atoms = gc.get_surface_atoms(grain).surface_atoms
         vertices = np.array([400, 413])
-        composition = np.array((550, 450, 450),
+        composition = np.array([(550, 450, 450)],
                                dtype=[('Fe', 'i8'), ('Pt', 'i8'),
                                       ('Zn', 'i8')])
         composition = pd.DataFrame(composition, index=[0])
@@ -344,7 +344,7 @@ class TestGrainCreation(unittest.TestCase):
         self.assertTrue(np.sum(grain.surface_atoms['removed']) == 7)
         # Test removal of vertices leading to correct composition
         vertices = np.array([401])
-        composition = np.array((0, 0, 1),
+        composition = np.array([(0, 0, 1)],
                                dtype=[('Fe', 'i8'), ('Pt', 'i8'),
                                       ('Zn', 'i8')])
         composition = pd.DataFrame(composition, index=[0])
@@ -357,7 +357,7 @@ class TestGrainCreation(unittest.TestCase):
         self.assertTrue(np.sum(grain.surface_atoms['removed']) == 8)
         # Test inability to remove any vertices leading to new surface
         vertices = np.array([403])
-        composition = np.array((1, 0, 0),
+        composition = np.array([(1, 0, 0)],
                                dtype=[('Fe', 'i8'), ('Pt', 'i8'),
                                       ('Zn', 'i8')])
         composition = pd.DataFrame(composition, index=[0])

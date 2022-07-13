@@ -1,2 +1,2 @@
-# Grain_Modeller
+# Grain Modeller
 Material Science Modelling Toolkit

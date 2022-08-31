@@ -2,6 +2,6 @@
 Material Science Modelling Toolkit that produces complex models for Molecular Dynamics simulation.
 
 # Mission
-To build an open source modelling package that helps Material Scientists build complex models easily.
+Become an open source modelling package that helps Material Scientists build complex models easily.
 
 
